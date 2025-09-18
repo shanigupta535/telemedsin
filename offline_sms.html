@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Offline Message Demo</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto;margin:24px}
+    .status{padding:8px;border-radius:6px;margin-bottom:12px}
+    .online{background:#e6ffed;border:1px solid #8ce39b}
+    .offline{background:#fff0f0;border:1px solid #f09b9b}
+    form{display:flex;gap:8px;margin-bottom:12px}
+    input[type="text"]{flex:1;padding:8px}
+    button{padding:8px 12px}
+    ul{padding-left:18px}
+    li.saved{opacity:.7;font-style:italic}
+  </style>
+</head>
+<body>
+
+  <h1>Send a Message</h1>
+
+  <div id="net" class="status"></div>
+
+  <form id="msgForm">
+    <input id="msgInput" type="text" placeholder="Type message..." required />
+    <button type="submit">Send</button>
+  </form>
+
+  <h3>Message queue (local)</h3>
+  <ul id="queue"></ul>
+
+<script>
+/* Simple offline message queue using localStorage.
+   - Stores messages in localStorage key 'offlineQueue'
+   - If navigator.onLine is true, tries to send immediately
+   - When 'online' event fires, tries to flush queue
+*/
+
+// Helpers
+const QUEUE_KEY = 'offlineQueue';
+const $ = id => document.getElementById(id);
+
+function loadQueue(){
+  try { return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]') } catch(e){ return [] }
+}
+function saveQueue(arr){ localStorage.setItem(QUEUE_KEY, JSON.stringify(arr)) }
+
+function renderQueue(){
+  const list = loadQueue();
+  const ul = $('queue');
+  ul.innerHTML = '';
+  if (list.length === 0) {
+    ul.innerHTML = '<li>(empty)</li>'; return;
+  }
+  list.forEach((m, i) => {
+    const li = document.createElement('li');
+    li.className = m.sent ? '' : 'saved';
+    li.textContent = `${m.text} — ${new Date(m.time).toLocaleString()}${m.sent ? ' (sent)' : ' (saved offline)'}`;
+    ul.appendChild(li);
+  });
+}
+
+// Fake send function: replace with real endpoint in production
+async function sendToServer(messageObj){
+  // Example: return fetch('/api/send', {method:'POST', body:JSON.stringify(messageObj)})
+  // For demo, simulate network POST with a resolved Promise
+  return new Promise((res) => setTimeout(()=>res({ok:true}), 500));
+}
+
+async function trySendQueue(){
+  if (!navigator.onLine) return;
+  const queue = loadQueue();
+  if (!queue.length) { renderQueue(); return; }
+
+  // Attempt to send messages in order
+  for (let i = 0; i < queue.length; i++){
+    if (queue[i].sent) continue;
+    try {
+      const resp = await sendToServer(queue[i]);
+      if (resp && (resp.ok || resp.status === 200 || resp.status === 201)) {
+        queue[i].sent = true; // mark sent
+      } else {
+        // if server returns error, keep the message and stop loop
+        break;
+      }
+    } catch(e){
+      // network error — stop and wait for next online event
+      break;
+    }
+  }
+  saveQueue(queue);
+  renderQueue();
+  updateStatus();
+}
+
+// UI + events
+function updateStatus(){
+  const net = $('net');
+  if (navigator.onLine) {
+    net.className = 'status online';
+    net.textContent = 'Online — messages will be sent immediately.';
+  } else {
+    net.className = 'status offline';
+    net.textContent = 'Offline — messages will be saved locally and sent when online.';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateStatus();
+  renderQueue();
+  // try to flush any saved messages (if online)
+  trySendQueue();
+});
+
+window.addEventListener('online', () => {
+  updateStatus();
+  trySendQueue();
+});
+window.addEventListener('offline', updateStatus);
+
+$('msgForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = $('msgInput').value.trim();
+  if (!text) return;
+  const queue = loadQueue();
+  const item = { text, time: Date.now(), sent: false };
+  if (navigator.onLine) {
+    // try to send immediately
+    try {
+      const resp = await sendToServer(item);
+      if (resp && (resp.ok || resp.status === 200 || resp.status === 201)) {
+        item.sent = true;
+      }
+    } catch (err) {
+      // fall back to saving on failure
+    }
+  }
+  queue.push(item);
+  saveQueue(queue);
+  $('msgInput').value = '';
+  renderQueue();
+  updateStatus();
+});
+</script>
+</body>
+</html>

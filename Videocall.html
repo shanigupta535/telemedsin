@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Call Demo</title>
+  <style>
+    body{font-family:sans-serif;display:flex;flex-direction:column;align-items:center;padding:20px}
+    video{width:45%;margin:10px;border:2px solid #333;border-radius:10px}
+    #videos{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    textarea{width:90%;height:100px;margin:10px 0}
+    button{padding:8px 16px;margin:5px}
+  </style>
+</head>
+<body>
+  <h2>WebRTC Video Call (No Server)</h2>
+  <div id="videos">
+    <video id="localVideo" autoplay playsinline muted></video>
+    <video id="remoteVideo" autoplay playsinline></video>
+  </div>
+
+  <textarea id="offer" placeholder="Offer / Answer"></textarea><br>
+  <button id="createOffer">Create Offer</button>
+  <button id="createAnswer">Create Answer</button>
+  <button id="setAnswer">Set Answer</button>
+
+  <script>
+    const pc = new RTCPeerConnection();
+    const localVideo = document.getElementById("localVideo");
+    const remoteVideo = document.getElementById("remoteVideo");
+    const offerBox = document.getElementById("offer");
+
+    // Show remote stream
+    pc.ontrack = (event) => {
+      remoteVideo.srcObject = event.streams[0];
+    };
+
+    // Get user video/audio
+    async function init(){
+      const stream = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+      stream.getTracks().forEach(track => pc.addTrack(track, stream));
+      localVideo.srcObject = stream;
+    }
+    init();
+
+    // Create offer
+    document.getElementById("createOffer").onclick = async () => {
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      offerBox.value = JSON.stringify(offer);
+    };
+
+    // Create answer
+    document.getElementById("createAnswer").onclick = async () => {
+      const offer = JSON.parse(offerBox.value);
+      await pc.setRemoteDescription(new RTCSessionDescription(offer));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      offerBox.value = JSON.stringify(answer);
+    };
+
+    // Set answer
+    document.getElementById("setAnswer").onclick = async () => {
+      const answer = JSON.parse(offerBox.value);
+      await pc.setRemoteDescription(new RTCSessionDescription(answer));
+      alert("Answer set! Video call connected.");
+    };
+  </script>
+</body>
+</html>

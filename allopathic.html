@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allopathic Doctors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+        body {background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%); min-height: 100vh; padding: 40px 20px; display: flex; flex-direction: column; align-items: center;}
+        .header {text-align: center; margin-bottom: 40px; max-width: 800px;}
+        .header h1 {color: #2c5c2c; font-size: 2.8rem; margin-bottom: 15px; font-weight: 700;}
+        .header p {color: #555; font-size: 1.2rem; line-height: 1.6;}
+        .container {display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1200px;}
+        .card {background: white; border-radius: 15px; overflow: hidden; width: 350px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;}
+        .card:hover {transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);}
+        .card-header {position: relative; height: 200px; overflow: hidden;}
+        .card-image {width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;}
+        .card:hover .card-image {transform: scale(1.05);}
+        .card-overlay {position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0, 0, 0, 0.7)); height: 50%; display: flex; align-items: flex-end; padding: 20px;}
+        .doctor-name {color: white; font-size: 1.6rem; font-weight: 600; margin-bottom: 5px;}
+        .card-body {padding: 25px;}
+        .specialty {color: #2c5c2c; font-size: 1.1rem; font-weight: 500; margin-bottom: 15px; display: flex; align-items: center;}
+        .specialty i {margin-right: 10px; font-size: 1.2rem;}
+        .detail-item {display: flex; margin-bottom: 15px;}
+        .detail-icon {min-width: 30px; color: #2c5c2c; font-size: 1.1rem; margin-top: 3px;}
+        .detail-content {color: #555; line-height: 1.5;}
+        .certification {background: #f8f9f2; border-left: 4px solid #7cb342; padding: 12px 15px; border-radius: 0 5px 5px 0; margin-top: 20px;}
+        .certification-title {font-weight: 600; color: #2c5c2c; margin-bottom: 5px;}
+        .certification-desc {color: #666; font-size: 0.9rem;}
+        .card-footer {padding: 20px 25px; background: #f9f9f9; display: flex; justify-content: space-between;}
+        .btn {padding: 10px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; font-size: 0.9rem; display: inline-block;}
+        .btn-primary {background: #4a7c4a; color: white; border: none;}
+        .btn-primary:hover {background: #3a633a;}
+        .btn-outline {border: 1px solid #4a7c4a; color: #4a7c4a; background: transparent;}
+        .btn-outline:hover {background: #f0f5f0;}
+        @media (max-width: 768px) {.container {gap: 20px;} .card {width: 100%; max-width: 400px;} .header h1 {font-size: 2.2rem;} .header p {font-size: 1rem;}}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Our Allopathic Specialists</h1>
+        <p>Meet our team of certified allopathic doctors with expertise in modern medicine, patient care, and advanced healthcare solutions.</p>
+    </div>
+    
+    <div class="container">
+        <!-- Doctor 1 -->
+        <div class="card">
+            <div class="card-header">
+                <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d" alt="Dr. Priya Sharma" class="card-image">
+                <div class="card-overlay">
+                    <h2 class="doctor-name">Dr. Priya Sharma</h2>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="specialty">
+                    <i class="fas fa-stethoscope"></i>
+                    Internal Medicine Specialist
+                </div>
+                <div class="detail-item"><div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div><div class="detail-content"><strong>Location:</strong> New Delhi, India</div></div>
+                <div class="detail-item"><div class="detail-icon"><i class="fas fa-user-md"></i></div><div class="detail-content"><strong>Expertise:</strong> Diabetes, Hypertension, Lifestyle Diseases</div></div>
+                <div class="detail-item"><div class="detail-icon"><i class="fas fa-graduation-cap"></i></div><div class="detail-content"><strong>Experience:</strong> 12 years in Internal Medicine</div></div>
+                <div class="certification"><div class="certification-title">Certifications</div><div class="certification-desc">MBBS, MD (Internal Medicine), Fellowship in Critical Care</div></div>
+            </div>
+            <div class="card-footer"><a href="#" class="btn btn-primary">Book Consultation</a><a href="#" class="btn btn-outline">View Profile</a></div>
+        </div>
+        
+        <!-- Doctor 2 -->
+        <div class="card">
+            <div class="card-header">
+                <img src="assets/doctor.jfif" alt="Dr. Rajesh Kumar" class="card-image">
+                <div class="card-overlay">
+                    <h2 class="doctor-name">Dr. Rajesh Kumar</h2>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="specialty">
+                    <i class="fas fa-heartbeat"></i>
+                    Cardiologist
+                </div>
+                <div class="detail-item"><div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div><div class="detail-content"><strong>Location:</strong> Kerala, India</div></div>
+                <div class="detail-item"><div class="detail-icon"><i class="fas fa-user-md"></i></div><div class="detail-content"><strong>Expertise:</strong> Heart Disease, Angioplasty, Cardiac Care</div></div>
+                <div class="detail-item"><div class="detail-icon"><i class="fas fa-graduation-cap"></i></div><div class="detail-content"><strong>Experience:</strong> 15 years in Cardiology</div></div>
+                <div class="certification"><div class="certification-title">Certifications</div><div class="certification-desc">MBBS, MD (Medicine), DM (Cardiology), Fellow of American College of Cardiology</div></div>
+            </div>
+            <div class="card-footer"><a href="#" class="btn btn-primary">Book Consultation</a><a href="#" class="btn btn-outline">View Profile</a></div>
+        </div>
+        
+        <!-- Doctor 3 -->
+        <div class="card">
+            <div class="card-header">
+                <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d" alt="Dr. Anjali Patel" class="card-image">
+                <div class="card-overlay">
+                    <h2 class="doctor-name">Dr. Anjali Patel</h2>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="specialty">
+                    <i class="fas fa-female"></i>
+                    Gynecologist & Obstetrician
+                </div>
+                <div class="detail-item"><div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div><div class="detail-content"><strong>Location:</strong> Mumbai, India</div></div>
+                <div class="detail-item"><div class="detail-icon"><i class="fas fa-user-md"></i></div><div class="detail-content"><strong>Expertise:</strong> Women's Health, Pregnancy Care, Fertility Treatment</div></div>
+                <div class="detail-item"><div class="detail-icon"><i class="fas fa-graduation-cap"></i></div><div class="detail-content"><strong>Experience:</strong> 10 years in Gynecology & Obstetrics</div></div>
+                <div class="certification"><div class="certification-title">Certifications</div><div class="certification-desc">MBBS, MD (Gynecology & Obstetrics), Diploma in Reproductive Medicine</div></div>
+            </div>
+            <div class="card-footer"><a href="#" class="btn btn-primary">Book Consultation</a><a href="#" class="btn btn-outline">View Profile</a></div>
+        </div>
+    </div>
+</body>
+</html>
